@@ -13,8 +13,7 @@ const { FORCE_HTTPS, FORCE_HOST, HTTP_LOG_LEVEL } = process.env
 if(FORCE_HOST) {
   app.use((req, res, next) => {
     if(req.headers.host !== FORCE_HOST) {
-      const protocol = (req.connection.encrypted) ? 'https' : 'http'
-      res.redirect(`${protocol}://${FORCE_HOST}${req.url}`)
+      res.redirect(`//${FORCE_HOST}${req.url}`)
     } else {
       next()
     }
@@ -24,8 +23,8 @@ if(FORCE_HOST) {
 // Force Https?
 if(FORCE_HTTPS === '1') {
   app.use((req, res, next) => {
-    if(req.header('x-forwarded-proto') !== 'https') {
-      res.redirect(`https://${req.header('host')}${req.url}`)
+    if(req.connection.encrypted) {
+      res.redirect(`https://${req.headers.host}${req.url}`)
     } else {
       next()
     }
