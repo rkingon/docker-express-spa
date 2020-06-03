@@ -1,0 +1,14 @@
+{
+  "name": "docker-express-spa",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-spa": "^0.0.2",
+    "morgan": "^1.9.1"
+  }
+}
