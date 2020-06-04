@@ -23,7 +23,7 @@ if(FORCE_HOST) {
 // Force Https?
 if(FORCE_HTTPS === '1') {
   app.use((req, res, next) => {
-    if(!req.connection.encrypted) {
+    if(req.header('x-forwarded-proto') !== 'https') {
       res.redirect(`https://${req.headers.host}${req.url}`)
     } else {
       next()
