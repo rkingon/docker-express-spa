@@ -2,6 +2,7 @@ const express = require('express')
 const spa = require('express-spa')
 const morgan = require('morgan')
 const path = require('path')
+const httpProxy = require('express-http-proxy')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -36,9 +37,31 @@ if(HTTP_LOG_LEVEL) {
   app.use(morgan(HTTP_LOG_LEVEL))
 }
 
-app.use(spa(path.join(srcFolder, 'index.html')))
-app.use(express.static(srcFolder))
+let config = {}
+try {
+  config = require('./express.json')
+} catch (e) {
+  // no config file
+}
 
+// Proxies
+if(config.proxies) {
+  for(const [url, proxy] of Object.entries(config.proxies)) {
+    app.use(url, httpProxy(proxy.origin))
+  }
+}
+
+// Redirects
+if(config.redirects) {
+  for(const [uri, redirect] of Object.entries(config.redirects)) {
+    app.get(uri, (req, res) => {
+      const { url, type = 301 } = redirect
+      res.redirect(type, url)
+    })
+  }
+}
+
+// Runtime (look into a better way...)
 app.get('/runtime.json', (req, res) => {
   const env = process.env
   const runtime = Object.entries(env).reduce((all, [prop, val]) => {
@@ -49,6 +72,10 @@ app.get('/runtime.json', (req, res) => {
   }, {})
   res.json(runtime)
 })
+
+// SPA
+app.use(spa(path.join(srcFolder, 'index.html')))
+app.use(express.static(srcFolder))
 
 app.listen(port)
 console.log('server started ' + port)
