@@ -8,7 +8,7 @@ const app = express()
 const port = process.env.PORT || 5000
 const srcFolder = path.join(__dirname, 'src')
 
-const { FORCE_HTTPS, FORCE_HOST, HTTP_LOG_LEVEL } = process.env
+const { FORCE_HTTPS, FORCE_HOST, HTTP_LOG_LEVEL, PRERENDER_TOKEN } = process.env
 
 // Force host?
 if(FORCE_HOST) {
@@ -42,6 +42,11 @@ try {
   config = require('./express.json')
 } catch (e) {
   // no config file
+}
+
+// Prerender.io
+if(PRERENDER_TOKEN) {
+  app.use(require('prerender-node').set('prerenderToken', PRERENDER_TOKEN))
 }
 
 // Proxies
