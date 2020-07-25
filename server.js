@@ -60,7 +60,9 @@ if(config.proxies) {
 if(config.redirects) {
   for(const [uri, redirect] of Object.entries(config.redirects)) {
     app.get(uri, (req, res) => {
-      const { url, type = 301 } = redirect
+      let { url, type = 301 } = redirect
+      const wildcard = req.params['0']
+      url = url.replace('$1', wildcard)
       res.redirect(type, url)
     })
   }
