@@ -2,7 +2,12 @@ const puppeteer = require('puppeteer')
 const path = require('path')
 
 function shouldPrerender ({ userAgent, uri }) {
-  return (!userAgent.toLowerCase().includes('mozilla') && !path.extname(uri))
+  userAgent = userAgent.toLowerCase()
+  return (
+    (userAgent.includes('lighthouse') || userAgent.includes('insights'))
+    ||
+    (!userAgent.toLowerCase().includes('mozilla') && !path.extname(uri))
+  )
 }
 
 const cache = {}
