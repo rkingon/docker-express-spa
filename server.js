@@ -8,7 +8,7 @@ const app = express()
 const port = process.env.PORT || 5000
 const srcFolder = path.join(__dirname, 'src')
 
-const { FORCE_HTTPS, FORCE_HOST, HTTP_LOG_LEVEL, PRERENDER_TOKEN } = process.env
+const { FORCE_HTTPS, FORCE_HOST, HTTP_LOG_LEVEL, PRERENDER, PRERENDER_TOKEN } = process.env
 
 // Force host?
 if(FORCE_HOST) {
@@ -30,6 +30,11 @@ if(FORCE_HTTPS === '1') {
       next()
     }
   })
+}
+
+// Prerender?
+if(PRERENDER === '1') {
+  app.use(require('./prerender'))
 }
 
 // Logs?

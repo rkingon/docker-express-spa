@@ -11,6 +11,7 @@
     "express-http-proxy": "^1.6.0",
     "express-spa": "^0.0.2",
     "morgan": "^1.9.1",
-    "prerender-node": "^3.2.5"
+    "prerender-node": "^3.2.5",
+    "puppeteer": "^5.5.0"
   }
 }
