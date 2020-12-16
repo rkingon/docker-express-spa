@@ -3,12 +3,17 @@ const spa = require('express-spa')
 const morgan = require('morgan')
 const path = require('path')
 const httpProxy = require('express-http-proxy')
+const bodyParser = require("body-parser")
 
 const app = express()
 const port = process.env.PORT || 5000
 const srcFolder = path.join(__dirname, 'src')
 
 const { FORCE_HTTPS, FORCE_HOST, HTTP_LOG_LEVEL, PRERENDER, PRERENDER_TOKEN } = process.env
+
+app.use(bodyParser.json({
+  limit: '1mb'
+}))
 
 // Force host?
 if(FORCE_HOST) {
