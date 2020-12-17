@@ -11,6 +11,7 @@ const srcFolder = path.join(__dirname, 'src')
 
 const { FORCE_HTTPS, FORCE_HOST, HTTP_LOG_LEVEL, PRERENDER, PRERENDER_TOKEN } = process.env
 
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({
   limit: '1mb'
 }))
