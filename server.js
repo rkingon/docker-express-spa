@@ -63,7 +63,17 @@ if(PRERENDER_TOKEN) {
 // Proxies
 if(config.proxies) {
   for(const [url, proxy] of Object.entries(config.proxies)) {
-    app.use(url, httpProxy(proxy.origin))
+    const options = {}
+    if(proxy.forwardPath) {
+      options.proxyReqPathResolver = (req) => {
+        let retUrl = url
+        if(req.url !== '/') {
+          retUrl += req.url
+        }
+        return retUrl
+      }
+    }
+    app.use(url, httpProxy(proxy.origin, options))
   }
 }
 
