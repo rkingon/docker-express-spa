@@ -101,6 +101,12 @@ app.get('/runtime.json', (req, res) => {
   res.json(runtime)
 })
 
+// API
+if (config.api) {
+  const apiRouter = require(config.api.entry)
+  app.use(config.api.prefix, apiRouter)
+}
+
 // SPA
 app.use(spa(path.join(srcFolder, 'index.html')))
 app.use(express.static(srcFolder))
